@@ -3,7 +3,7 @@ library = {
     "Python":["Automate the boring stuff"],
     "History": ["The history of Bangladesh"]
 }
-
+library = {k.capitalize(): v for k, v in library.items()}
 def add_book(catagory, title):
     if catagory in library:
         if title not in library[catagory]:
@@ -19,6 +19,6 @@ def add_book(catagory, title):
         for title in library[catagory]:
             print(f"{catagory} -> {title}")
 
-input1 = input("What's your book catagory?: ")
-input2 = input("What's the titel of the book?: ")
+input1 = input("What's your book catagory?: ").strip().capitalize()
+input2 = input("What's the titel of the book?: ").strip().capitalize()
 add_book(input1, input2)
