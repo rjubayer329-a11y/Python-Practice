@@ -15,7 +15,6 @@ def add_book(catagory, title):
         print(f"Catagory {catagory} not found!")
     
     for catagory in library:
-        library[catagory]
         for title in library[catagory]:
             print(f"{catagory} -> {title}")
 
