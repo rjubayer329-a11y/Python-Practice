@@ -12,12 +12,16 @@ def add_book(catagory, title):
         else:
             print("We already have this book!")
     else:
-        print(f"Catagory {catagory} not found!")
+        library[catagory] = [title]
+        print("A new book is added")
     
+def show_book():
+    print("------------------------------------")
     for catagory in library:
         for title in library[catagory]:
             print(f"{catagory} -> {title}")
-
+    print("------------------------------------")
 input1 = input("What's your book catagory?: ").strip().capitalize()
-input2 = input("What's the titel of the book?: ").strip().capitalize()
+input2 = input("What's the title of the book?: ").strip().capitalize()
 add_book(input1, input2)
+show_book()
