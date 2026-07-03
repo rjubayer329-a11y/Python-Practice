@@ -28,7 +28,7 @@ def show_book():
         print(f"[{catagory.upper()}]")
         for title in books:
             print(f" > {title}")
-    print("-"*30 + "\n")
+    print("-"*30)
 
 def save_data():
     with open("libraryData.json", "w") as file:
@@ -50,12 +50,45 @@ def guess_catagory(title):
     for catagory, keywords in brain.items():
         for word in keywords:
             if word in title_clean:
-                return catagory
+                return catagory.lower()
     return "Unknown"
 
+def teach_brain(catagory, title):
+    cat_lower = catagory.lower()
+    words = title.lower().split()
+
+    skip_words = ["the", "a", "an", "and", "of", "in", "to", "for", "with", "on", "at", "by", "is"]
+
+    if cat_lower not in brain:
+        brain[cat_lower] = []
+
+    for word in words:
+        word = word.strip(".,!?\"'")
+        if word not in skip_words and len(word) > 2:
+            if word not in brain[cat_lower]:
+                brain[cat_lower].append(word)
+                print(f"Brain updated: Learned that keyword '{word}' impliles '{catagory}'")
+
+def brain_data_save():
+    with open("brain_data.json", "w") as file:
+        json.dump(brain, file)
+        print("Data seved to the brain✅")
+
+def brain_data_load():
+    global brain
+    try:
+        with open("brain_data.json", "r") as file:
+            brain = json.load(file)
+            print("The brain file has loaded✅")
+    except FileNotFoundError:
+        print("We couldn't find the brain data file")
+
 load_data()
-user_title = input("Enter the title of the book: ")
+brain_data_load()
+
+user_title = input("Enter the title of the book: ").strip()
 prediction = guess_catagory(user_title)
+
 if prediction != "Unknown":
     print(f"🤖 Your book catagory might be {prediction}")
     confermation = input("Do you want to conferm this catagory?: ").lower()
@@ -63,9 +96,14 @@ if prediction != "Unknown":
         final_cat = prediction
     else:
         final_cat = input("So, please enter the catagory: ")
+        #Teach the brain because user corrected it!
+        teach_brain(final_cat, user_title)
 else:
     print("🤖 I'm not sure about the catagory of this book!")
     final_cat = input("Please enter the catagory of this book: ")
+    #Teach the brain because it was Unknown!
+    teach_brain(final_cat, user_title)
 add_book(final_cat, user_title)
 show_book()
 save_data()
+brain_data_save()
