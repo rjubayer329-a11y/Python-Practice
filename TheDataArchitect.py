@@ -9,17 +9,18 @@ brain = {
     "Ai": ["Neural", "Intelligence", "Data", "Robot", "Machine"],
     "History": ["History", "Ancient", "War", "Century"]
 }
-brain = {k.lower(): [w.lower() for w in v] for k, v in brain.items()}
+
 library = {k.capitalize(): v for k, v in library.items()}
 def add_book(catagory, title):
-    if catagory in library:
-        if title not in library[catagory]:
-            library[catagory].append(title)
-            print(f"Added {title} to {catagory}")
+    cat_clean = catagory.strip().capitalize()
+    if cat_clean in library:
+        if title not in library[cat_clean]:
+            library[cat_clean].append(title)
+            print(f"Added {title} to {cat_clean}")
         else:
             print("We already have this book!")
     else:
-        library[catagory] = [title]
+        library[cat_clean] = [title]
         print("A new book is added")
     
 def show_book():
@@ -82,6 +83,8 @@ def brain_data_load():
             print("The brain file has loaded✅")
     except FileNotFoundError:
         print("We couldn't find the brain data file")
+        brain = {k.lower(): [w.lower() for w in v] for k, v in brain.items()}
+        brain_data_save()
 
 load_data()
 brain_data_load()
@@ -94,6 +97,7 @@ if prediction != "Unknown":
     confermation = input("Do you want to conferm this catagory?: ").lower()
     if confermation == "yes":
         final_cat = prediction
+        teach_brain(final_cat, user_title)
     else:
         final_cat = input("So, please enter the catagory: ")
         #Teach the brain because user corrected it!
