@@ -70,6 +70,25 @@ def teach_brain(catagory, title):
                 brain[cat_lower].append(word)
                 print(f"Brain updated: Learned that keyword '{word}' impliles '{catagory}'")
 
+# We can delete keyword through this function:
+def prune_brain():
+    print(f"Your dictionary:\n")
+    for catagory, keywords in brain.items():
+        print(f"[{catagory.upper()}]")
+        for keyword in keywords:
+            print(f" > {keyword}")
+    deletion_title = input("Enter the title you want to delete: ").strip().lower()
+    deletion_catagory = input("Enter the catagory where the title from: ").strip().lower()
+    if deletion_catagory in brain:
+        if deletion_title in brain[deletion_catagory]:
+            brain[deletion_catagory].remove(deletion_title)
+            print("The keyword deleted successfully✅")
+            brain_data_save()
+        else:
+            print("The title is not in the category!❌")
+    else:
+        print("The category is not in your brain file❌")
+
 def brain_data_save():
     with open("brain_data.json", "w") as file:
         json.dump(brain, file)
@@ -88,6 +107,13 @@ def brain_data_load():
 
 load_data()
 brain_data_load()
+
+#applying the prune_brain() function
+asking_for_deletion = input("Do you want to delete any keyword from your brain file: ")
+if asking_for_deletion == "yes":
+    prune_brain()
+else:
+    pass
 
 user_title = input("Enter the title of the book: ").strip()
 prediction = guess_catagory(user_title)
